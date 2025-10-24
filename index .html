@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国游民 | 发现最佳远程工作城市 - 2025指南</title>
+    <style>
+        :root { --primary: #4CAF50; --secondary: #2196F3; --bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); --text: #333; --card-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body { font-family: 'PingFang SC', sans-serif; margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        header { background: linear-gradient(var(--primary), var(--secondary)); color: white; text-align: center; padding: 2rem 1rem; box-shadow: var(--card-shadow); }
+        .search-bar { width: 100%; max-width: 500px; padding: 0.8rem; border: none; border-radius: 25px; font-size: 1rem; margin: 1rem auto; display: block; box-shadow: var(--card-shadow); }
+        .filters { display: flex; flex-wrap: wrap; gap: 1rem; padding: 1.5rem; background: white; border-radius: 12px; margin: 1rem auto; max-width: 800px; box-shadow: var(--card-shadow); }
+        .filter-item { flex: 1; min-width: 150px; }
+        .filter-item label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
+        .filter-item input[type="range"] { width: 100%; }
+        .ai-btn { background: var(--secondary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer; transition: transform 0.3s; }
+        .ai-btn:hover { transform: scale(1.05); }
+        .map-placeholder { height: 250px; background: #e9ecef; display: flex; align-items: center; justify-content: center; margin: 1rem auto; max-width: 800px; border-radius: 12px; border: 2px dashed var(--primary); font-size: 1.2rem; cursor: pointer; }
+        .map-placeholder:hover { background: #d1ecf1; }
+        .cities, .gurus { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
+        .city-card, .guru-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.3s, box-shadow 0.3s; }
+        .city-card:hover, .guru-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .city-score { font-size: 1.8rem; font-weight: bold; color: var(--secondary); }
+        .tags { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .tag { background: var(--primary); color: white; padding: 0.3rem 0.6rem; border-radius: 15px; font-size: 0.8rem; }
+        .spaces-activities { margin-top: 1rem; font-size: 0.9rem; }
+        .spaces-activities h4 { color: var(--secondary); margin: 0.5rem 0; }
+        .spaces-activities ul { list-style: none; padding: 0; }
+        .spaces-activities li { margin: 0.3rem 0; background: #f8f9fa; padding: 0.4rem; border-radius: 5px; }
+        .guru-avatar { width: 50px; height: 50px; border-radius: 50%; margin-right: 1rem; }
+        .guru-header { display: flex; align-items: center; margin-bottom: 0.5rem; }
+        .guru-name { font-weight: bold; color: var(--secondary); }
+        .guru-meta { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; }
+        .guru-content { line-height: 1.4; }
+        .guru-link { color: var(--secondary); text-decoration: none; font-weight: bold; }
+        .guru-link:hover { text-decoration: underline; }
+        .calculator { padding: 1.5rem; background: white; margin: 1rem auto; max-width: 400px; border-radius: 12px; box-shadow: var(--card-shadow); }
+        .calc-input { width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 1px solid #ddd; border-radius: 5px; }
+        .calc-btn { background: var(--primary); color: white; border: none; padding: 0.8rem; border-radius: 5px; cursor: pointer; width: 100%; }
+        .top-list { background: white; margin: 1rem auto; max-width: 800px; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); }
+        .top-list h3, .gurus h3 { padding: 1rem; background: var(--secondary); color: white; margin: 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        .loading { text-align: center; color: var(--secondary); font-style: italic; }
+        .load-more { text-align: center; margin: 1rem; }
+        .load-more-btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer; }
+        @media (max-width: 768px) { .filters { flex-direction: column; padding: 1rem; } .cities, .gurus { grid-template-columns: 1fr; } header { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 中国游民指南 4.0</h1>
+        <p>2025高铁时代的最佳远程工作城市 | 成本<3000元/月，WiFi满格，空气清新</p>
+        <input type="text" class="search-bar" placeholder="搜索城市，如 '成都 咖啡'" id="searchInput">
+    </header>
+
+    <section class="top-list">
+        <h3>🏆 Top5 游民城市榜（基于评分）</h3>
+        <table>
+            <tr><th>排名</th><th>城市</th><th>总分</th><th>月成本</th></tr>
+            <tr><td>1</td><td>大理</td><td>4.8</td><td>1800元</td></tr>
+            <tr><td>2</td><td>厦门</td><td>4.7</td><td>2800元</td></tr>
+            <tr><td>3</td><td>桂林</td><td>4.6</td><td>2100元</td></tr>
+            <tr><td>4</td><td>成都</td><td>4.5</td><td>2500元</td></tr>
+            <tr><td>5</td><td>青岛</td><td>4.4</td><td>2600元</td></tr>
+        </table>
+    </section>
+
+    <section class="filters">
+        <div class="filter-item">
+            <label>💰 月成本 (元): <span id="costValue">2000</span></label>
+            <input type="range" min="1000" max="5000" value="2000" id="costSlider" onchange="updateFilters()">
+        </div>
+        <div class="filter-item">
+            <label>🛡️ 安全分: <span id="safetyValue">4</span>/5</label>
+            <input type="range" min="1" max="5" value="4" id="safetySlider" onchange="updateFilters()">
+        </div>
+        <div class="filter-item">
+            <label>🌡️ 气候 (℃): <span id="climateValue">20</span></label>
+            <input type="range" min="0" max="30" value="20" id="climateSlider" onchange="updateFilters()">
+        </div>
+        <button class="ai-btn" onclick="aiRecommend()">🤖 AI推荐Top5</button>
+    </section>
+
+    <section class="map-placeholder" onclick="window.open('https://lbs.amap.com/', '_blank')">
+        🗺️ 点击打开高德地图探索（免费API集成中）
+    </section>
+
+    <section class="cities" id="citiesList">
+        <div class="loading">加载中... 发现最佳城市</div>
+    </section>
+
+    <section class="gurus">
+        <h3>🌟 数字游民大咖专栏（实时分享）</h3>
+        <div id="gurusList">
+            <div class="loading">加载大咖动态...</div>
+        </div>
+        <div class="load-more">
+            <button class="load-more-btn" onclick="loadMoreGurus()">加载更多</button>
+        </div>
+    </section>
+
+    <section class="calculator">
+        <h3>🧮 月成本模拟</h3>
+        <input type="number" class="calc-input" id="rent" value="1500" placeholder="住宿">
+        <input type="number" class="calc-input" id="food" value="800" placeholder="餐饮">
+        <input type="number" class="calc-input" id="transport" value="200" placeholder="交通">
+        <button class="calc-btn" onclick="calculateCost()">计算总成本</button>
+        <p id="totalCost">总计: 2500 元/月</p>
+    </section>
+
+    <script>
+        // 升级城市数据：添加spaces & activities
+        const citiesData = [
+            { name: '成都', score: 4.5, cost: 2500, safety: 4, climate: 18, tags: ['🚄高铁圈', '☕咖啡多', '🌫️AQI<50'], spaces: ['DNβ资阳国际数字游民社区（2364m²共享办公+公寓）', '天星村共享青创办公空间（乡村低成本）'], activities: ['数字游民新村民圆桌论坛', '创意workshop（每月1场）'] },
+            { name: '上海', score: 4.2, cost: 4500, safety: 5, climate: 22, tags: ['📡5G满速', '🏠共享办公<50元/天'], spaces: ['漕泾数字游民国际村（共享办公+驿站）', 'V聚场（培训+直播空间）'], activities: ['社交共创活动（青年驿站）', '创业基金workshop'] },
+            { name: '厦门', score: 4.7, cost: 2800, safety: 4, climate: 25, tags: ['🏖️海滨', '👨‍💻游民社区活跃'], spaces: ['余村数字游民公社（共享办公）', '黑多岛数字游民社区（共居）'], activities: ['数字游民生活周（乡村体验）', '青年交流meetup'] },
+            { name: '杭州', score: 4.3, cost: 3200, safety: 4, climate: 20, tags: ['💳微信友好', '🌳公园多'], spaces: ['良渚数栖湾AI社区（免费办公+补助）', '青山青年社·龙坞里（展览+学习室）'], activities: ['AdventureX黑客松', '数字游民小镇圆桌'] },
+            { name: '重庆', score: 4.0, cost: 2200, safety: 3, climate: 24, tags: ['🔥火锅天堂', '🚀创业氛围'], spaces: ['OVU创客星（开放工位+会议室）', '麓湖生态城（新型社区办公）'], activities: ['社交沙龙+讲座（每月）', '创业氛围workshop'] },
+            { name: '北京', score: 3.8, cost: 5000, safety: 4, climate: 15, tags: ['🏛️文化中心', '📚图书馆多'], spaces: ['数字游民国际人才港（信创办公）', '国贸创意园（开放工位）'], activities: ['数字化转型论坛', '青年社区路演活动'] },
+            { name: '深圳', score: 4.1, cost: 4000, safety: 4, climate: 26, tags: ['💡科技氛围', '🌙夜生活'], spaces: ['706 x Cactus数字游民驿站（共居办公）', 'WeWork深圳（灵活空间）'], activities: ['Maker Space共创活动', '科技氛围meetup'] },
+            { name: '青岛', score: 4.4, cost: 2600, safety: 4, climate: 16, tags: ['🍺啤酒节', '🏖️海鲜'], spaces: ['市南区高端共享办公（香港中路商圈）', '青岛共享办公精装修空间'], activities: ['啤酒节数字游民聚会', '海鲜主题社交活动'] },
+            { name: '桂林', score: 4.6, cost: 2100, safety: 3, climate: 23, tags: ['🏞️山水甲天下', '🚲骑行友好'], spaces: ['黟川两岸创意街区（黑多岛社区办公）', '山水骑行友好空间'], activities: ['乡村旅居体验周', '数字游民共创项目'] },
+            { name: '大理', score: 4.8, cost: 1800, safety: 3, climate: 19, tags: ['🌸洱海', '🧘‍♀️冥想天堂'], spaces: ['Dali Hub（咖啡厅+活动室）', '素方舟共享办公（有机素食+露台）'], activities: ['科创/文创月度活动（100人规模）', '洱海冥想workshop'] }
+        ];
+
+        function renderCities(filteredCities) {
+            const container = document.getElementById('citiesList');
+            if (filteredCities.length === 0) {
+                container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color: var(--secondary);">暂无匹配城市，试试放宽过滤！</p>';
+                return;
+            }
+            container.innerHTML = filteredCities.map(city => `
+                <div class="city-card">
+                    <h3>${city.name} ${city.score > 4 ? '⭐⭐⭐⭐⭐' : '⭐⭐⭐⭐'}</h3>
+                    <div class="city-score">${city.score}/5</div>
+                    <p>月成本: ${city.cost}元 | 安全: ${city.safety}/5 | 气候: ${city.climate}℃</p>
+                    <div class="tags">${city.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+                    <div class="spaces-activities">
+                        <h4>🏠 本地空间</h4>
+                        <ul>${city.spaces.map(space => `<li>${space}</li>`).join('')}</ul>
+                        <h4>🎉 活动情况</h4>
+                        <ul>${city.activities.map(activity => `<li>${activity}</li>`).join('')}</ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateFilters() {
+            const costMax = document.getElementById('costSlider').value;
+            const safetyMin = document.getElementById('safetySlider').value;
+            const climate = document.getElementById('climateSlider').value;
+            document.getElementById('costValue').textContent = costMax;
+            document.getElementById('safetyValue').textContent = safetyMin;
+            document.getElementById('climateValue').textContent = climate;
+
+            const filtered = citiesData.filter(city => 
+                city.cost <= costMax && city.safety >= safetyMin && Math.abs(city.climate - climate) <= 5
+            );
+            renderCities(filtered);
+        }
+
+        function aiRecommend() {
+            const query = document.getElementById('searchInput').value || '预算低 爱咖啡';
+            alert(`基于"${query}"，AI推荐：\n1. 成都 (咖啡多，高铁便捷，2500元/月)\n2. 杭州 (公园宜人，3200元/月)\n3. 大理 (洱海放松，1800元/月)\n详细报告？加微信解锁9.9元！`);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = citiesData.filter(city => city.name.toLowerCase().includes(term));
+            renderCities(filtered);
+        });
+
+        function calculateCost() {
+            const total = parseInt(document.getElementById('rent').value) + 
+                          parseInt(document.getElementById('food').value) + 
+                          parseInt(document.getElementById('transport').value) || 0;
+            document.getElementById('totalCost').textContent = `总计: ${total} 元/月`;
+        }
+
+        // 大咖数据&函数（不变）
+        const gurusData = [
+            {
+                avatar: 'https://pbs.twimg.com/profile_images/1848930225922707459/ZSydNbWq.jpg',
+                name: '@NiuSheldon',
+                meta: '2025-07-12 | 967赞',
+                content: '成为数字游民之后，给我带来最大的幸福感的是两件事：1. 睡觉不再需要设闹钟，永远自然醒。2. 不用和任何人打交道，自然少了很多内耗。一个人有钱有闲的日子真的很舒服。',
+                link: 'https://x.com/NiuSheldon/status/1943879313943662703'
+            },
+            {
+                avatar: 'https://pbs.twimg.com/profile_images/1949434880959676416/GEQGVlME.jpg',
+                name: '@GoSailGlobal',
+                meta: '2025-10-21 | 10赞',
+                content: '去年的我，也是从职场刚出来...数字游民的生活其实没想象中的那么自由，自由的代价是自律，找到自己的主线。',
+                link: 'https://x.com/GoSailGlobal/status/1980516398846882201'
+            },
+            {
+                avatar: 'https://pbs.twimg.com/profile_images/1765120357042622464/Mkgehayb.jpg',
+                name: '@garrulous_abyss',
+                meta: '2025-01-09 | 561赞',
+                content: '晚上6点，收拾东西准备下班...感觉过上了理想的生活。能做科研，还能生活状况稳定。法国工作难找是真的，生活工作平衡也是真的。',
+                link: 'https://x.com/garrulous_abyss/status/1877492912008614026'
+            },
+            {
+                avatar: 'https://pbs.twimg.com/profile_images/1902015254533079296/9xAuxBYh.jpg',
+                name: '@leviyuen',
+                meta: '2025-07-17 | 2654赞',
+                content: '中国版的数字游民网站正式上线！宜居城市：https://yiju.city/china...这是一个长期项目，初衷是解决我自己的需求，也希望它能帮助到更多追寻自由的人。',
+                link: 'https://x.com/leviyuen/status/1945745918634148157'
+            },
+            {
+                avatar: 'https://pbs.twimg.com/profile_images/1949434880959676416/GEQGVlME.jpg',
+                name: '@GoSailGlobal',
+                meta: '2025-07-27 | 697赞',
+                content: '我现在终于实现了说走就走的自由了...现在的我想去什么地方，认识谁，和谁交流，我都能立刻出发。放下了在大城市的那一切后，当我能自己选择，在什么时候做什么事后。我才觉得真正的人生才刚开始。',
+                link: 'https://x.com/GoSailGlobal/status/1949467524669776131'
+            }
+        ];
+
+        let displayedGurus = 5;
+
+        function renderGurus() {
+            const container = document.getElementById('gurusList');
+            container.innerHTML = gurusData.slice(0, displayedGurus).map(guru => `
+                <div class="guru-card">
+                    <div class="guru-header">
+                        <img src="${guru.avatar}" alt="${guru.name}" class="guru-avatar">
+                        <div>
+                            <div class="guru-name">${guru.name}</div>
+                            <div class="guru-meta">${guru.meta}</div>
+                        </div>
+                    </div>
+                    <div class="guru-content">${guru.content.substring(0, 150)}...</div>
+                    <a href="${guru.link}" target="_blank" class="guru-link">阅读全文 on X</a>
+                </div>
+            `).join('');
+        }
+
+        function loadMoreGurus() {
+            displayedGurus += 5;
+            renderGurus();
+            if (displayedGurus >= gurusData.length) {
+                document.querySelector('.load-more-btn').style.display = 'none';
+            }
+        }
+
+        // 初始化
+        setTimeout(() => {
+            renderCities(citiesData);
+            updateFilters();
+            renderGurus();
+        }, 500);
+    </script>
+</body>
+</html>
