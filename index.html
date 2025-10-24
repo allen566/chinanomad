@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国游民 | 发现最佳远程工作城市</title>
+    <style>
+        /* 简洁中性色调：蓝绿主色 */
+        :root { --primary: #4CAF50; --secondary: #2196F3; --bg: #f5f5f5; --text: #333; }
+        body { font-family: 'PingFang SC', sans-serif; margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        header { background: var(--primary); color: white; text-align: center; padding: 1rem; }
+        .search-bar { width: 100%; padding: 0.5rem; box-sizing: border-box; margin-bottom: 1rem; }
+        .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem; background: white; border-radius: 8px; margin: 1rem; }
+        .filter-item { flex: 1; min-width: 120px; }
+        .filter-item label { display: block; font-size: 0.9rem; }
+        .filter-item input[type="range"] { width: 100%; }
+        .map-placeholder { height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; margin: 1rem; border: 1px solid #ddd; }
+        .cities { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; padding: 1rem; }
+        .city-card { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .city-score { font-size: 1.5rem; font-weight: bold; color: var(--secondary); }
+        .tags { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .tag { background: var(--primary); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .calculator { padding: 1rem; background: white; margin: 1rem; border-radius: 8px; }
+        @media (max-width: 768px) { .filters { flex-direction: column; } .cities { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 中国游民指南</h1>
+        <p>高铁时代的最佳远程工作城市 | 成本<3000元/月，WiFi满格，空气清新</p>
+        <input type="text" class="search-bar" placeholder="搜索城市，如 '成都 咖啡'" id="searchInput">
+    </header>
+
+    <!-- 过滤面板：成本、安全、气候 -->
+    <section class="filters">
+        <div class="filter-item">
+            <label>💰 月成本 (元): <span id="costValue">2000</span></label>
+            <input type="range" min="1000" max="5000" value="2000" id="costSlider" onchange="updateFilters()">
+        </div>
+        <div class="filter-item">
+            <label>🛡️ 安全分: <span id="safetyValue">4</span>/5</label>
+            <input type="range" min="1" max="5" value="4" id="safetySlider" onchange="updateFilters()">
+        </div>
+        <div class="filter-item">
+            <label>🌡️ 气候 (℃): <span id="climateValue">20</span></label>
+            <input type="range" min="0" max="30" value="20" id="climateSlider" onchange="updateFilters()">
+        </div>
+        <button onclick="aiRecommend()" style="background: var(--secondary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;">🤖 AI推荐Top5</button>
+    </section>
+
+    <!-- 地图占位：后期用高德API -->
+    <section class="map-placeholder">
+        🗺️ 中国互动地图（点击城市查看详情） - 集成高德API
+    </section>
+
+    <!-- Top10城市榜单 -->
+    <section class="cities" id="citiesList">
+        <!-- JS动态生成 -->
+    </section>
+
+    <!-- 成本计算器 -->
+    <section class="calculator">
+        <h3>🧮 月成本模拟</h3>
+        <label>住宿: <input type="number" id="rent" value="1500"> 元</label><br>
+        <label>餐饮: <input type="number" id="food" value="800"> 元</label><br>
+        <label>交通: <input type="number" id="transport" value="200"> 元</label><br>
+        <button onclick="calculateCost()">计算总成本</button>
+        <p id="totalCost">总计: 2500 元/月</p>
+    </section>
+
+    <script>
+        // 示例数据：50个中国城市，评分/成本等（手动更新或Airtable导入）
+        const citiesData = [
+            { name: '成都', score: 4.5, cost: 2500, safety: 4, climate: 18, tags: ['🚄高铁圈', '☕咖啡多', '🌫️AQI<50'] },
+            { name: '上海', score: 4.2, cost: 4500, safety: 5, climate: 22, tags: ['📡5G满速', '🏠共享办公<50元/天'] },
+            { name: '厦门', score: 4.7, cost: 2800, safety: 4, climate: 25, tags: ['🏖️海滨', '👨‍💻游民社区活跃'] },
+            { name: '杭州', score: 4.3, cost: 3200, safety: 4, climate: 20, tags: ['💳微信友好', '🌳公园多'] },
+            { name: '重庆', score: 4.0, cost: 2200, safety: 3, climate: 24, tags: ['🔥火锅天堂', '🚀创业氛围'] },
+            // 添加更多... 目标50+
+        ];
+
+        // 渲染城市列表
+        function renderCities(filteredCities) {
+            const container = document.getElementById('citiesList');
+            container.innerHTML = filteredCities.map(city => `
+                <div class="city-card">
+                    <h3>${city.name} ${city.score > 4 ? '⭐⭐⭐⭐⭐' : '⭐⭐⭐⭐'}</h3>
+                    <div class="city-score">${city.score}/5</div>
+                    <p>月成本: ${city.cost}元 | 安全: ${city.safety}/5 | 气候: ${city.climate}℃</p>
+                    <div class="tags">${city.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+                </div>
+            `).join('');
+        }
+
+        // 过滤逻辑
+        function updateFilters() {
+            const costMax = document.getElementById('costSlider').value;
+            const safetyMin = document.getElementById('safetySlider').value;
+            const climate = document.getElementById('climateSlider').value;
+            document.getElementById('costValue').textContent = costMax;
+            document.getElementById('safetyValue').textContent = safetyMin;
+            document.getElementById('climateValue').textContent = climate;
+
+            const filtered = citiesData.filter(city => 
+                city.cost <= costMax && city.safety >= safetyMin && Math.abs(city.climate - climate) <= 5
+            );
+            renderCities(filtered);
+        }
+
+        // AI推荐模拟（后期Coze集成）
+        function aiRecommend() {
+            const query = document.getElementById('searchInput').value || '预算低 爱咖啡';
+            alert(`基于"${query}"，推荐：成都(咖啡多，高铁便捷)、杭州(公园宜人)。详细报告需会员解锁！`);
+            // 实际：调用Coze API生成个性化行程
+        }
+
+        // 搜索
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = citiesData.filter(city => city.name.toLowerCase().includes(term));
+            renderCities(filtered);
+        });
+
+        // 成本计算
+        function calculateCost() {
+            const total = parseInt(document.getElementById('rent').value) + 
+                          parseInt(document.getElementById('food').value) + 
+                          parseInt(document.getElementById('transport').value);
+            document.getElementById('totalCost').textContent = `总计: ${total} 元/月`;
+        }
+
+        // 初始化
+        renderCities(citiesData);
+        updateFilters();
+    </script>
+</body>
+</html>
