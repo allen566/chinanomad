@@ -50,7 +50,7 @@
 </head>
 <body>
     <header>
-        <h1>🚀 中国游民指南 4.0</h1>
+        <h1>🚀 中国游民指南 5.0</h1>
         <p>2025高铁时代的最佳远程工作城市 | 成本<3000元/月，WiFi满格，空气清新</p>
         <input type="text" class="search-bar" placeholder="搜索城市，如 '成都 咖啡'" id="searchInput">
     </header>
@@ -111,7 +111,7 @@
     </section>
 
     <script>
-        // 升级城市数据：添加spaces & activities
+        // 城市数据（含空间&活动）
         const citiesData = [
             { name: '成都', score: 4.5, cost: 2500, safety: 4, climate: 18, tags: ['🚄高铁圈', '☕咖啡多', '🌫️AQI<50'], spaces: ['DNβ资阳国际数字游民社区（2364m²共享办公+公寓）', '天星村共享青创办公空间（乡村低成本）'], activities: ['数字游民新村民圆桌论坛', '创意workshop（每月1场）'] },
             { name: '上海', score: 4.2, cost: 4500, safety: 5, climate: 22, tags: ['📡5G满速', '🏠共享办公<50元/天'], spaces: ['漕泾数字游民国际村（共享办公+驿站）', 'V聚场（培训+直播空间）'], activities: ['社交共创活动（青年驿站）', '创业基金workshop'] },
@@ -179,7 +179,7 @@
             document.getElementById('totalCost').textContent = `总计: ${total} 元/月`;
         }
 
-        // 大咖数据&函数（不变）
+        // 大咖数据（不变）
         const gurusData = [
             {
                 avatar: 'https://pbs.twimg.com/profile_images/1848930225922707459/ZSydNbWq.jpg',
